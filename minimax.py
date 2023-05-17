@@ -286,7 +286,7 @@ def easy():
     while not game_over:
         # Player 1 Input
         if turn == AI_1 and not game_over:
-            col, minimax_score = minimax(board, 5, True, AI_1)
+            col, minimax_score = minimax(board, 3, True, AI_1)
 
             if is_valid_location(board, col):
                 pygame.time.wait(300)
@@ -306,7 +306,7 @@ def easy():
 
         # Player 2 Input
         elif turn == AI_2 and not game_over:
-            col, minimax_score = minimax(board, 5, True, AI_2)
+            col, minimax_score = minimax(board, 3, True, AI_2)
 
             if is_valid_location(board, col):
                 pygame.time.wait(300)
@@ -330,7 +330,63 @@ def easy():
 
 
 def hard():
-    print("Hard")
+    board = create_board()
+    print_board(board)
+    game_over = False
+
+    pygame.init()
+    screen = pygame.display.set_mode(size)
+    pygame.display.set_caption('Connect 4')
+    draw_board(board)
+    pygame.display.update()
+
+    myfont = pygame.font.SysFont("monospace", 75)
+
+    turn = random.randint(AI_1, AI_2)
+
+    while not game_over:
+        # Player 1 Input
+        if turn == AI_1 and not game_over:
+            col, minimax_score = minimax(board, 6, True, AI_1)
+
+            if is_valid_location(board, col):
+                pygame.time.wait(300)
+                row = get_next_open_row(board, col)
+                drop_piece(board, row, col, AI_1_PIECE)
+
+                if winning_move(board, AI_1_PIECE):
+                    label = myfont.render("Player 1 wins!!", 1, RED)
+                    screen.blit(label, (40, 10))
+                    game_over = True
+
+                turn += 1
+                turn = turn % 2
+
+                print_board(board)
+                draw_board(board)
+
+        # Player 2 Input
+        elif turn == AI_2 and not game_over:
+            col, minimax_score = minimax(board, 6, True, AI_2)
+
+            if is_valid_location(board, col):
+                pygame.time.wait(300)
+                row = get_next_open_row(board, col)
+                drop_piece(board, row, col, AI_2_PIECE)
+
+                if winning_move(board, AI_2_PIECE):
+                    label = myfont.render("Player 2 wins!!", 1, YELLOW)
+                    screen.blit(label, (40, 10))
+                    game_over = True
+
+                turn += 1
+                turn = turn % 2
+
+                print_board(board)
+                draw_board(board)
+        if game_over:
+            pygame.time.wait(3000)
+print("Hard")
 
 
 def button(screen, position, text, size, colors="black on white"):
