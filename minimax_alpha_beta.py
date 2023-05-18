@@ -233,6 +233,7 @@ def minimax_alpha_beta(board, depth, alpha, beta, maximizingPlayer, player):
             return column, value
 
 
+
 def get_valid_locations(board):
     valid_locations = []
     for col in range(COLUMN_COUNT):
@@ -254,6 +255,68 @@ def pick_best_move(board, piece):
             best_score = score
             best_col = col
     return best_col
+
+
+def random_agent():
+    board = create_board()
+    print_board(board)
+    game_over = False
+
+    pygame.init()
+    screen = pygame.display.set_mode(size)
+    pygame.display.set_caption('Connect 4')
+    draw_board(board)
+    pygame.display.update()
+
+    myfont = pygame.font.SysFont("monospace", 75)
+
+    turn = random.randint(AI_1, AI_2)
+
+    while not game_over:
+        # Player 1 Input
+        if turn == AI_1 and not game_over:
+            col = random.choice(get_valid_locations(board))
+
+            if is_valid_location(board, col):
+                pygame.time.wait(300)
+                row = get_next_open_row(board, col)
+                drop_piece(board, row, col, AI_1_PIECE)
+
+                if winning_move(board, AI_1_PIECE):
+                    label = myfont.render("Player 1 wins!!", 1, RED)
+                    screen.blit(label, (40, 10))
+                    game_over = True
+
+                turn += 1
+                turn = turn % 2
+
+                print_board(board)
+                draw_board(board)
+
+        # Player 2 Input
+        elif turn == AI_2 and not game_over:
+            col = random.choice(get_valid_locations(board))
+
+            if is_valid_location(board, col):
+                pygame.time.wait(300)
+                row = get_next_open_row(board, col)
+                drop_piece(board, row, col, AI_2_PIECE)
+
+                if winning_move(board, AI_2_PIECE):
+                    label = myfont.render("Player 2 wins!!", 1, YELLOW)
+                    screen.blit(label, (40, 10))
+                    game_over = True
+
+                turn += 1
+                turn = turn % 2
+
+                print_board(board)
+                draw_board(board)
+
+        if game_over:
+            pygame.time.wait(3000)  # Wait for 3 seconds and shut down automatically
+
+    print("Random Agent")
 
 
 # GUI
@@ -334,6 +397,7 @@ def easy():
                 draw_board(board)
         if game_over:
             pygame.time.wait(3000)   # wait 3 sec and shut down automatically
+    random_agent()
     print("Easy")
 
 
@@ -357,7 +421,7 @@ def hard():
     while not game_over:
         # Player 1 Input
         if turn == AI_1 and not game_over:
-            col, minimax_score = minimax_alpha_beta(board, 6, -math.inf, math.inf, True, AI_1)
+            col, minimax_score = minimax_alpha_beta(board, 5, -math.inf, math.inf, True, AI_1)
 
             if is_valid_location(board, col):
                 pygame.time.wait(300)
@@ -398,6 +462,7 @@ def hard():
         if game_over:
             pygame.time.wait(3000)
 
+    random_agent()
     print("Hard")
 
 
