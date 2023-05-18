@@ -441,7 +441,7 @@ def hard():
 
         # Player 2 Input
         if turn == AI_2 and not game_over:
-            col, minimax_score = minimax_alpha_beta(board, 6, -math.inf, math.inf, True, AI_2)
+            col, minimax_score = minimax_alpha_beta(board, 5, -math.inf, math.inf, True, AI_2)
 
             if is_valid_location(board, col):
                 pygame.time.wait(300)

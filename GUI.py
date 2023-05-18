@@ -10,7 +10,7 @@ ROW_COUNT = 6
 i = 7
 COLUMN_COUNT = i
 
-SQUARESIZE = 95   #pixels
+SQUARESIZE = 75   #pixels
 width = COLUMN_COUNT * SQUARESIZE
 height = (ROW_COUNT + 1) * SQUARESIZE
 size = (width, height)
