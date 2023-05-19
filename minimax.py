@@ -8,6 +8,7 @@ BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
+WHITE = (255, 255, 255)
 
 ROW_COUNT = 6
 i = 7
@@ -330,6 +331,7 @@ def draw_board(board):
 
 
 def easy():
+    start_time = time.time()
     board = create_board()
     print_board(board)
     game_over = False
@@ -396,6 +398,7 @@ def easy():
 
 
 def hard():
+    start_time = time.time()
     board = create_board()
     print_board(board)
     game_over = False
@@ -460,25 +463,41 @@ def hard():
     print("Hard")
 
 
-def button(screen, position, text, size, colors="black on white"):
-    fg, bg = colors.split(" on ")
-    font = pygame.font.SysFont("Arial", size)
-    text_render = font.render(text, 1, fg)
-    x, y, w, h = text_render.get_rect()
-    x, y = position
-    pygame.draw.line(screen, (150, 150, 150), (x, y), (x + w, y), 5)
-    pygame.draw.line(screen, (150, 150, 150), (x, y - 2), (x, y + h), 5)
-    pygame.draw.line(screen, (50, 50, 50), (x, y + h), (x + w, y + h), 5)
-    pygame.draw.line(screen, (50, 50, 50), (x + w, y + h), [x + w, y], 5)
-    pygame.draw.rect(screen, bg, (x, y, w, h))
-    # print(screen.blit(text_render, (x, y)))
-    return screen.blit(text_render, (x, y))
+# Define button class
+class Button:
+    def __init__(self, pos, radius, text):
+        self.pos = pos
+        self.radius = radius
+        self.text = text
+        self.font = pygame.font.Font(None, 40)
+        self.default_color = WHITE
+        self.hover_color = YELLOW
+        self.current_color = self.default_color
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.current_color, self.pos, self.radius)
+        text_surface = self.font.render(self.text, True, (0, 0, 0))
+        text_rect = text_surface.get_rect(center=self.pos)
+        screen.blit(text_surface, text_rect)
+
+    def update(self, mouse_pos):
+        if self.is_hovered(mouse_pos):
+            self.current_color = self.hover_color
+        else:
+            self.current_color = self.default_color
+
+    def is_hovered(self, mouse_pos):
+        return pygame.Rect(self.pos[0] - self.radius, self.pos[1] - self.radius,
+                           2 * self.radius, 2 * self.radius).collidepoint(mouse_pos)
 
 
 def menu():
-    b0 = button(screen, (150, 10), "Choose Level", 55, "black on white")
-    b1 = button(screen, (150, 150), "Easy", 50, "red on yellow")
-    b2 = button(screen, (350, 150), "Hard", 50, "red on yellow")
+    button_radius = 53
+    button1_pos = (165, 320)
+    button2_pos = (343, 320)
+    button1 = Button(button1_pos, button_radius, "Easy")
+    button2 = Button(button2_pos, button_radius, "Hard")
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -487,17 +506,27 @@ def menu():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                # check when you click if the coordinates of the pointer are in the rectangle of the buttons
-                if b1.collidepoint(pygame.mouse.get_pos()):
-                    easy()
-                elif b2.collidepoint(pygame.mouse.get_pos()):
-                    hard()
+                if event.button == 1:  # Left mouse button
+                    mouse_pos = pygame.mouse.get_pos()
+                    if button1.is_hovered(mouse_pos):
+                        easy()
+                    elif button2.is_hovered(mouse_pos):
+                        hard()
+        mouse_pos = pygame.mouse.get_pos()
+        # Update buttons
+        button1.update(mouse_pos)
+        button2.update(mouse_pos)
+        screen.blit(background_image, (0, 0))
+        button1.draw(screen)
+        button2.draw(screen)
         pygame.display.update()
     pygame.quit()
 
-
-start_time = time.time()
 pygame.init()
-screen = pygame.display.set_mode((600, 400))
-pygame.display.set_caption('Connect 4 (minimax)')
+screen = pygame.display.set_mode((500, 500))
+pygame.display.set_caption('Connect 4 (Minimax)')
+# Load the background image
+background_image = pygame.image.load("Background.jpg")
+# Scale the image to fit the screen dimensions
+background_image = pygame.transform.scale(background_image, (500, 500))
 menu()
