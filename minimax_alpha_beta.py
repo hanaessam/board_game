@@ -1,6 +1,6 @@
 import math
 import random
-
+import time
 import numpy as np  # to help in making our matrix for problem representation
 import pygame
 
@@ -315,6 +315,7 @@ def random_agent():
 
         if game_over:
             pygame.time.wait(3000)  # Wait for 3 seconds and shut down automatically
+            pygame.quit()
 
     print("Random Agent")
 
@@ -396,11 +397,14 @@ def easy():
                 print_board(board)
                 draw_board(board)
         if game_over:
+            end_time = time.time()
+            execution_time = end_time - start_time
+            print(f'The execution time was {execution_time:.2f} seconds.')  # rounded to two decimal places
             pygame.time.wait(3000)   # wait 3 sec and shut down automatically
+            # pygame.quit()
+
     random_agent()
     print("Easy")
-
-
 
 
 def hard():
@@ -460,11 +464,14 @@ def hard():
                 turn %= 2
 
         if game_over:
+            end_time = time.time()
+            execution_time = end_time - start_time
+            print(f'The execution time was {execution_time:.2f} seconds.')  # rounded to two decimal places
             pygame.time.wait(3000)
+            # pygame.quit()
 
     random_agent()
     print("Hard")
-
 
 def button(screen, position, text, size, colors="black on white"):
     fg, bg = colors.split(" on ")
@@ -502,7 +509,8 @@ def menu():
     pygame.quit()
 
 
+start_time = time.time()
 pygame.init()
 screen = pygame.display.set_mode((600, 400))
-pygame.display.set_caption('Connect 4 (minimax)')
+pygame.display.set_caption('Connect 4 (alpha_beta)')
 menu()
