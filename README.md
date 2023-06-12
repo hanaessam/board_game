@@ -17,3 +17,5 @@ Security: AI tools can generate code that contains security vulnerabilities.
 Plagiarism: AI tools can generate code that is plagiarized from other sources.
 
 It's important to weigh the benefits and risks of using AI tools before using them in your coding projects. If you do decide to use AI tools, it's important to use them responsibly and to always review the code they generate carefully.
+
+[screen-capture.webm](https://github.com/hanaessam/board_game/assets/81986017/e5419634-0d93-44e1-8148-d62dd5d4677d)
